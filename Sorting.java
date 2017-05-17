@@ -72,10 +72,10 @@ public class Sorting {
         int[] aux = Arrays.copyOfRange(arr, p, r + 1);
         int i = 0, j = q + 1 - p;
         for (int k = p; k <= r; k++) {
-            if      (i > q - p)       { arr[k] = aux[j++]; }
-            else if (j > r - p)       { arr[k] = aux[i++]; }
-            else if (aux[i] < aux[j]) { arr[k] = aux[i++]; }
-            else                      { arr[k] = aux[j++]; }
+            if          (i > q - p)         { arr[k] = aux[j++]; }
+            else if     (j > r - p)         { arr[k] = aux[i++]; }
+            else if     (aux[i] < aux[j])   { arr[k] = aux[i++]; }
+            else                            { arr[k] = aux[j++]; }
         }
     }
 
