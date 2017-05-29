@@ -23,11 +23,11 @@ public class Sorting {
         // testMergeSort(arr4);
         // testMergeSort(arr5);
 
-        testQuickSort(arr1);
-        testQuickSort(arr2);
-        testQuickSort(arr3);
-        testQuickSort(arr4);
-        testQuickSort(arr5);
+        // testQuickSort(arr1);
+        // testQuickSort(arr2);
+        // testQuickSort(arr3);
+        // testQuickSort(arr4);
+        // testQuickSort(arr5);
 
         // testBubbleSort(arr1);
         // testBubbleSort(arr2);
@@ -41,14 +41,15 @@ public class Sorting {
         // testSelectionSort(arr4);
         // testSelectionSort(arr5);
 
-        // testCountingSort(arr1);
-        // testCountingSort(arr2);
-        // testCountingSort(arr3);
-        // testCountingSort(arr4);
-        // testCountingSort(arr5);
+        testCountingSort(arr1);
+        testCountingSort(arr2);
+        testCountingSort(arr3);
+        testCountingSort(arr4);
+        testCountingSort(arr5);
     }
 
 // Counting Sort ********************************************
+    // stable counting sort
     public static void testCountingSort(int[] arr) {
         int[] result = countingSort(arr);
         System.out.print("countingSort output: { ");
@@ -58,19 +59,18 @@ public class Sorting {
         System.out.print(" }\n"); 
     }
     public static int[] countingSort(int[] arr) {
-        int[] ret = arr.clone();
-        int min = ret[0], max = ret[0];
-        for (int num : arr) {
-            if (num > max)      max = num;
-            else if (num < min) min = num;
+        int[] ret = new int[arr.length];
+        int min = arr[0], max = arr[0];
+        for (int i = 0; i < ret.length; ++i) {
+            min = arr[i] < min ? arr[i] : min;
+            max = arr[i] > max ? arr[i] : max;
         }
         int[] count = new int[max - min + 1];
-        for (int num : arr) {
-            count[num - min]++;
-        }
+        for (int num : arr) count[num - min]++;
         for (int i = 1; i < count.length; ++i) count[i] += count[i - 1];
-        for (int i = arr.length - 1; i >= 0; --i) {
-            ret[--count[arr[i] - min]] = arr[i];
+        for (int i = 0; i < arr.length; ++i) {
+            int index = --count[arr[arr.length - 1 - i] - min]; ////////
+            ret[index] = arr[arr.length - 1 - i];
         }
         return ret;
     } 
@@ -90,8 +90,8 @@ public class Sorting {
     public static int[] selectionSort(int[] arr) {
         int[] ret = arr.clone();
         for (int i = 0; i < ret.length; ++i) {
-            int minIndex = i;
-            for (int j = i; j < ret.length; ++j) {
+            int minIndex = i, j;
+            for (j = i + 1; j < ret.length; ++j) {
                 if (ret[j] < ret[minIndex]) minIndex = j;
             }
             swap(ret, minIndex, i);
@@ -111,7 +111,7 @@ public class Sorting {
     }
     public static int[] bubbleSort(int[] arr) {
         int[] ret = arr.clone();
-        boolean flag;
+        boolean flag = false;
         for (int i = 0; i < ret.length; ++i) {
             for (int j = 1; j < ret.length; ++j) {
                 if (ret[j] < ret[j - 1]) {
@@ -119,6 +119,7 @@ public class Sorting {
                     flag = true;
                 }
             }
+            if (!flag) return ret;
         }
         return ret;
     }
@@ -137,8 +138,8 @@ public class Sorting {
     public static int[] insertionSort(int[] arr) {
         int[] ret = arr.clone();
         for (int i = 0; i < ret.length; ++i) {
-            int key = ret[i], j = i - 1;
-            while (j >= 0 && ret[j] > key) {
+            int j = i - 1, key = ret[i];
+            while(j >= 0 && ret[j] > key) {
                 ret[j + 1] = ret[j--];
             }
             ret[j + 1] = key;
@@ -172,12 +173,13 @@ public class Sorting {
         int[] aux = Arrays.copyOfRange(arr, p, r + 1);
         int i = 0, j = q + 1 - p;
         for (int k = p; k <= r; ++k) {
-            if      (i > q - p)       arr[k] = aux[j++];
-            else if (j > r - p)       arr[k] = aux[i++];
-            else if (aux[i] < aux[j]) arr[k] = aux[i++];
-            else                      arr[k] = aux[j++];
+            if      (i > q - p)         arr[k] = aux[j++];
+            else if (j > r - p)         arr[k] = aux[i++];
+            else if (aux[i] < aux[j])   arr[k] = aux[i++];
+            else                        arr[k] = aux[j++];
         }
     }
+    
 
 // Quick sort ************************************************
     public static void testQuickSort(int[] arr) {
@@ -202,7 +204,7 @@ public class Sorting {
     private static int partition(int[] arr, int p, int r) {
         int pivot = arr[r];
         int i = p - 1;
-        for (int j = p; j <= r; j++) {
+        for (int j = p; j <= r; ++j) {
             if (arr[j] < pivot) swap(arr, ++i, j);
         }
         swap(arr, ++i, r);
