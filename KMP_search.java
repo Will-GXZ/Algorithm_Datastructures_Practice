@@ -1,3 +1,5 @@
+import java.util.*;
+
 class KMP_search {
     /**
      * Returns a index to the first occurrence of target in source,
@@ -5,47 +7,44 @@ class KMP_search {
      * @param source string to be scanned.
      * @param target string containing the sequence of characters to match.
      */
-    public static int kmpSearch(String source, String target) {
+    public int strStr(String source, String target) {
         // KMP implementation.
         if (source == null || target == null) return -1;
         if (target.length() == 0) return 0;
-        int[] next = getNextArr(target);
-        char[] s = source.toCharArray();
-        char[] p = target.toCharArray();
-        int i = 0;
-        int j = 0;
-        while (i < s.length && j < p.length) {
-            if (j == -1 || s[i] == p[j]) {
+        int[] kmp = getKMP(target);
+        int i = 0, j = 0;
+        while (i < source.length() && j < target.length()) {
+            if (source.charAt(i) == target.charAt(j)) {
                 i++;
                 j++;
             } else {
-                j = next[j];
+                if (j == 0) i++;
+                else j = kmp[j - 1];
             }
         }
-        return j == p.length ? i - j : -1;
+        return j == target.length() ? i - j : -1;
     }
-    private static int[] getNextArr(String pattern) {
-        char[] p = pattern.toCharArray();
-        int k = -1;
-        int j = 0;
-        int[] next = new int[p.length];
-        next[0] = -1;
-        while (j < p.length - 1) {
-            if (k == -1 || p[k] == p[j]) {
-                next[++j] = ++k;
-                if (p[j] == p[k]) {
-                    next[j] = next[k];
-                }
-            }
-            else {
-                k = next[k];
+    private int[] getKMP(String target) {
+        char[] p = target.toCharArray();
+        int[] kmp = new int[p.length];
+        kmp[0] = 0;
+        int i = 0, j = 1;
+        while (j < p.length) {
+            if (p[i] == p[j]) {
+                kmp[j] = i + 1;
+                if (p[j] == p[kmp[j - 1]]) kmp[j - 1] = kmp[kmp[j - 1]];
+                i++;
+                j++;
+            } else {
+                if (i == 0) kmp[j++] = 0;
+                else i = kmp[i - 1];
             }
         }
-        return next;
+        return kmp;
     }
+
     public static void main(String[] args) {
-        // test
-        int res = kmpSearch("BBC ABCDAB ABCDABCDABDE", "ABCDABD");
+        int res = new KMP_search().strStr("abcdabcdaae", "abcdaa");
         System.out.println(res);
     }
 }
