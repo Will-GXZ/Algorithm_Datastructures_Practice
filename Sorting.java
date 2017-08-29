@@ -18,17 +18,17 @@ public class Sorting {
         // testInsertionSort(arr4);
         // testInsertionSort(arr5);
     
-        // testMergeSort(arr1);
-        // testMergeSort(arr2);
-        // testMergeSort(arr3);
-        // testMergeSort(arr4);
-        // testMergeSort(arr5);
+        testMergeSort(arr1);
+        testMergeSort(arr2);
+        testMergeSort(arr3);
+        testMergeSort(arr4);
+        testMergeSort(arr5);
 
-        testQuickSort(arr1);
-        testQuickSort(arr2);
-        testQuickSort(arr3);
-        testQuickSort(arr4);
-        testQuickSort(arr5);
+        // testQuickSort(arr1);
+        // testQuickSort(arr2);
+        // testQuickSort(arr3);
+        // testQuickSort(arr4);
+        // testQuickSort(arr5);
 
         // testBubbleSort(arr1);
         // testBubbleSort(arr2);
@@ -198,6 +198,7 @@ public class Sorting {
             else arr[k] = aux[j++];
         }
     }
+
     
 
 // Quick sort ************************************************
@@ -209,33 +210,33 @@ public class Sorting {
         }
         System.out.print(" }\n");
     }
+
     public static int[] quickSort(int[] arr) {
-        int[] ret = arr.clone();
+        int[] ret = Arrays.copyOf(arr, arr.length);
         quickSort(ret, 0, ret.length - 1);
         return ret;
     }
     private static void quickSort(int[] arr, int p, int r) {
         if (p >= r) return;
-        int q = partition(arr, p ,r);
+        int q = partition(arr, p, r);
         quickSort(arr, p, q - 1);
         quickSort(arr, q + 1, r);
     }
     private static int partition(int[] arr, int p, int r) {
-        using the last element as pivot
+        // use the last element as pivot 
         int pivot = arr[r];
         int i = p - 1, j = p;
-        for (j = p; j < r; ++j) {
-            if (arr[j] <= pivot) {
-                swap(arr, ++i, j);
-            }
+        while (j < r) {
+            if (arr[j] <= pivot) swap(arr, ++i, j++);
+            else j++;
         }
         swap(arr, ++i, r);
         return i;
     }
-    private static void swap(int[] arr, int p, int q) {
-        int t = arr[p];
-        arr[p] = arr[q];
-        arr[q] = t;
+    private static void swap(int[] arr, int i, int j) {
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
     }
 }
 
