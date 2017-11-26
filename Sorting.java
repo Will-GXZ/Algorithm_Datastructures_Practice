@@ -11,13 +11,13 @@ public class Sorting {
         int[] arr3 = {34, 5, 12, 12, 59, 846, 1323, 22, 4, 22, 8};
         int[] arr4 = {2};
         int[] arr5 = {5, 4};
-        
+
         // testInsertionSort(arr1);
         // testInsertionSort(arr2);
         // testInsertionSort(arr3);
         // testInsertionSort(arr4);
         // testInsertionSort(arr5);
-    
+
         testMergeSort(arr1);
         testMergeSort(arr2);
         testMergeSort(arr3);
@@ -54,29 +54,12 @@ public class Sorting {
     public static void testCountingSort(int[] arr) {
         int[] result = countingSort(arr);
         System.out.print("countingSort output: { ");
-        for (int n : result) { 
+        for (int n : result) {
             System.out.print(n + " ");
         }
-        System.out.print(" }\n"); 
+        System.out.print(" }\n");
     }
     public static int[] countingSort(int[] arr) {
-        // int min = arr[0], max = arr[0];
-        // int[] ret = new int[arr.length];
-        // for (int i : arr) {
-        //     if (i > max) max = i;
-        //     if (i < min) min = i;
-        // }
-        // int[] count = new int[max - min + 1];
-        // for (int i : arr) {
-        //     count[i - min]++;
-        // }
-        // for (int i = 1; i < count.length; ++i) {
-        //     count[i] += count[i - 1];
-        // }
-        // for (int i = arr.length - 1; i >= 0; --i) {
-        //     ret[--count[arr[i] - min]] = arr[i];
-        // }
-        // return ret;
         int[] ret = new int[arr.length];
         int min = arr[0], max = arr[0];
         for (int i : arr) {
@@ -87,9 +70,14 @@ public class Sorting {
         for (int i : arr) {
             count[i - min]++;
         }
+        // 为了stable，将count数组转换为原始count数组的preSum数组, 到这里为止，解释一下：
+        // 现在count 数组中的 count[i] 表示原数组arr中有 count[i] 个数小于等于 i+min;
+        // 则我们可知原数组中位置最靠右的 i+min, 它在结果中的位置一定是 index=count[i]-1
         for (int i = 1; i < count.length; ++i) {
             count[i] += count[i - 1];
         }
+        // 根据如上理由，ret中的数 x（最靠右的x） 在count中对应的下标应为 x-min，而 count[x-min]-1 就
+        // 是 x 在ret中的 index，于是将 x 放在 ret[count[x-min]]-1 之后，还要将 count[x-min] 也减一
         for (int i = arr.length - 1; i >= 0; --i) {
             ret[--count[arr[i] - min]] = arr[i];
         }
@@ -104,7 +92,7 @@ public class Sorting {
     public static void testSelectionSort(int[] arr) {
         int[] result = selectionSort(arr);
         System.out.print("selectionSort output: { ");
-        for (int n : result) { 
+        for (int n : result) {
             System.out.print(n + " ");
         }
         System.out.print(" }\n");
@@ -126,7 +114,7 @@ public class Sorting {
     public static void testBubbleSort(int[] arr) {
         int[] result = bubbleSort(arr);
         System.out.print("bubbleSort output: { ");
-        for (int n : result) { 
+        for (int n : result) {
             System.out.print(n + " ");
         }
         System.out.print(" }\n");
@@ -147,7 +135,7 @@ public class Sorting {
     public static void testInsertionSort(int[] arr) {
         int[] result = insertionSort(arr);
         System.out.print("insertionSort output: { ");
-        for (int n : result) { 
+        for (int n : result) {
             System.out.print(n + " ");
         }
         System.out.print(" }\n");
@@ -171,7 +159,7 @@ public class Sorting {
     public static void testMergeSort(int[] arr) {
         int[] result = mergeSort(arr);
         System.out.print("mergeSort output: { ");
-        for (int n : result) { 
+        for (int n : result) {
             System.out.print(n + " ");
         }
         System.out.print(" }\n");
@@ -199,13 +187,13 @@ public class Sorting {
         }
     }
 
-    
+
 
 // Quick sort ************************************************
     public static void testQuickSort(int[] arr) {
         int[] result = quickSort(arr);
         System.out.print("quickSort output: { ");
-        for (int n : result) { 
+        for (int n : result) {
             System.out.print(n + " ");
         }
         System.out.print(" }\n");
@@ -223,7 +211,7 @@ public class Sorting {
         quickSort(arr, q + 1, r);
     }
     private static int partition(int[] arr, int p, int r) {
-        // use the last element as pivot 
+        // use the last element as pivot
         int pivot = arr[r];
         int i = p - 1, j = p;
         while (j < r) {
@@ -239,23 +227,3 @@ public class Sorting {
         arr[j] = t;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
