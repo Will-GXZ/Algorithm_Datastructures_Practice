@@ -18,17 +18,17 @@ public class Sorting {
         // testInsertionSort(arr4);
         // testInsertionSort(arr5);
 
-        testMergeSort(arr1);
-        testMergeSort(arr2);
-        testMergeSort(arr3);
-        testMergeSort(arr4);
-        testMergeSort(arr5);
+        // testMergeSort(arr1);
+        // testMergeSort(arr2);
+        // testMergeSort(arr3);
+        // testMergeSort(arr4);
+        // testMergeSort(arr5);
 
-        // testQuickSort(arr1);
-        // testQuickSort(arr2);
-        // testQuickSort(arr3);
-        // testQuickSort(arr4);
-        // testQuickSort(arr5);
+        testQuickSort(arr1);
+        testQuickSort(arr2);
+        testQuickSort(arr3);
+        testQuickSort(arr4);
+        testQuickSort(arr5);
 
         // testBubbleSort(arr1);
         // testBubbleSort(arr2);
@@ -176,14 +176,18 @@ public class Sorting {
         mergeSort(arr, q + 1, r);
         merge(arr, p, q, r);
     }
+
+    // 写这个函数之前先画图：
+    //  input arr: __|p|__________| q |______| r |_____
+    //  aux:         |0|__________|q-p|______|r-p|
     private static void merge(int[] arr, int p, int q, int r) {
         int[] aux = Arrays.copyOfRange(arr, p, r + 1);
-        int i = 0, j = q + 1 - p;
-        for (int k = p; k < r + 1; k++) {
-            if (i > q - p) arr[k] = aux[j++];
-            else if (j > r - p) arr[k] = aux[i++];
+        int i = 0, j = q - p + 1;
+        for (int k = p; k < r + 1; ++k) {
+            if (i > q - p)            arr[k] = aux[j++];
+            else if (j > r - p)       arr[k] = aux[i++];
             else if (aux[i] < aux[j]) arr[k] = aux[i++];
-            else arr[k] = aux[j++];
+            else                      arr[k] = aux[j++];
         }
     }
 
@@ -211,14 +215,24 @@ public class Sorting {
         quickSort(arr, q + 1, r);
     }
     private static int partition(int[] arr, int p, int r) {
-        // use the last element as pivot
+        // // use the last element as pivot
+        // int pivot = arr[r];
+        // int i = p - 1, j = p;
+        // while (j < r) {
+        //     if (arr[j] <= pivot) swap(arr, ++i, j++);
+        //     else j++;
+        // }
+        // swap(arr, ++i, r);
+        // return i;
+
+
+           // 或者让j最右移到r，这样不需要另外换r到i+1
         int pivot = arr[r];
         int i = p - 1, j = p;
-        while (j < r) {
+        while (j <= r) {
             if (arr[j] <= pivot) swap(arr, ++i, j++);
             else j++;
         }
-        swap(arr, ++i, r);
         return i;
     }
     private static void swap(int[] arr, int i, int j) {
