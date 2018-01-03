@@ -18,17 +18,17 @@ public class Sorting {
         // testInsertionSort(arr4);
         // testInsertionSort(arr5);
 
-        // testMergeSort(arr1);
-        // testMergeSort(arr2);
-        // testMergeSort(arr3);
-        // testMergeSort(arr4);
-        // testMergeSort(arr5);
+        testMergeSort(arr1);
+        testMergeSort(arr2);
+        testMergeSort(arr3);
+        testMergeSort(arr4);
+        testMergeSort(arr5);
 
-        testQuickSort(arr1);
-        testQuickSort(arr2);
-        testQuickSort(arr3);
-        testQuickSort(arr4);
-        testQuickSort(arr5);
+        // testQuickSort(arr1);
+        // testQuickSort(arr2);
+        // testQuickSort(arr3);
+        // testQuickSort(arr4);
+        // testQuickSort(arr5);
 
         // testBubbleSort(arr1);
         // testBubbleSort(arr2);
@@ -61,12 +61,14 @@ public class Sorting {
     }
     public static int[] countingSort(int[] arr) {
         int[] ret = new int[arr.length];
+        // 先建一个长度等于数据范围的数组
         int min = arr[0], max = arr[0];
         for (int i : arr) {
             if (i > max) max = i;
             else if (i < min) min = i;
         }
         int[] count = new int[max - min + 1];
+        // 数组中每个位置存放input array中对应元素出现的次数
         for (int i : arr) {
             count[i - min]++;
         }
@@ -156,6 +158,11 @@ public class Sorting {
 
 
 // Merge sort ************************************************
+/*
+    MergeSort 为什么需要 O(n) space：
+    因为每次我们需要把两个sorted array merge 到原来的 array 中的时候，我们必须新建辅助数组
+    储存那两个array，这个过程在recursion的过程中，至多消耗O(n)的space；
+*/
     public static void testMergeSort(int[] arr) {
         int[] result = mergeSort(arr);
         System.out.print("mergeSort output: { ");
@@ -164,6 +171,42 @@ public class Sorting {
         }
         System.out.print(" }\n");
     }
+
+    // // 每次复制数组的写法
+    // public static int[] mergeSort(int[] arr) {
+    //     if (arr.length == 1) return arr;
+    //     int mid = arr.length / 2 - 1;
+    //     int[] left = null, right = null;
+    //     if (mid + 1 >= 0) {
+    //         left = Arrays.copyOfRange(arr, 0, mid + 1);
+    //     }
+    //     if (arr.length >= mid + 1) {
+    //         right = Arrays.copyOfRange(arr, mid + 1, arr.length);
+    //     }
+    //     int[] sortedLeft = mergeSort(left);
+    //     int[] sortedRight = mergeSort(right);
+    //     if (sortedLeft != null && sortedRight != null) {
+    //         return merge(sortedLeft, sortedRight);
+    //     } else if (sortedLeft != null) return sortedLeft;
+    //     else return sortedRight;
+    // }
+    //
+    // private static int[] merge(int[] arr1, int[] arr2) {
+    //     int[] ret = new int[arr1.length + arr2.length];
+    //     int left = 0, right = 0;
+    //     for (int i = 0; i < ret.length; ++i) {
+    //         if (left >= arr1.length) ret[i] = arr2[right++];
+    //         else if (right >= arr2.length) ret[i] = arr1[left++];
+    //         else if (arr1[left] < arr2[right]) ret[i] = arr1[left++];
+    //         else ret[i] = arr2[right++];
+    //     }
+    //     return ret;
+    // }
+
+
+
+
+    // MergeSort 简洁的写法
     public static int[] mergeSort(int[] arr) {
         int[] ret = Arrays.copyOf(arr, arr.length);
         mergeSort(ret, 0, ret.length - 1);
@@ -235,6 +278,7 @@ public class Sorting {
         }
         return i;
     }
+
     private static void swap(int[] arr, int i, int j) {
         int t = arr[i];
         arr[i] = arr[j];
