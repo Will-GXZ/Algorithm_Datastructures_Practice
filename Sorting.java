@@ -18,17 +18,17 @@ public class Sorting {
         // testInsertionSort(arr4);
         // testInsertionSort(arr5);
 
-        testMergeSort(arr1);
-        testMergeSort(arr2);
-        testMergeSort(arr3);
-        testMergeSort(arr4);
-        testMergeSort(arr5);
+        // testMergeSort(arr1);
+        // testMergeSort(arr2);
+        // testMergeSort(arr3);
+        // testMergeSort(arr4);
+        // testMergeSort(arr5);
 
-        // testQuickSort(arr1);
-        // testQuickSort(arr2);
-        // testQuickSort(arr3);
-        // testQuickSort(arr4);
-        // testQuickSort(arr5);
+        testQuickSort(arr1);
+        testQuickSort(arr2);
+        testQuickSort(arr3);
+        testQuickSort(arr4);
+        testQuickSort(arr5);
 
         // testBubbleSort(arr1);
         // testBubbleSort(arr2);
@@ -85,7 +85,6 @@ public class Sorting {
         }
         return ret;
     }
-
 
 
 // Selection sort **************************************************
@@ -172,67 +171,66 @@ public class Sorting {
         System.out.print(" }\n");
     }
 
-    // // 每次复制数组的写法
-    // public static int[] mergeSort(int[] arr) {
-    //     if (arr.length == 1) return arr;
-    //     int mid = arr.length / 2 - 1;
-    //     int[] left = null, right = null;
-    //     if (mid + 1 >= 0) {
-    //         left = Arrays.copyOfRange(arr, 0, mid + 1);
-    //     }
-    //     if (arr.length >= mid + 1) {
-    //         right = Arrays.copyOfRange(arr, mid + 1, arr.length);
-    //     }
-    //     int[] sortedLeft = mergeSort(left);
-    //     int[] sortedRight = mergeSort(right);
-    //     if (sortedLeft != null && sortedRight != null) {
-    //         return merge(sortedLeft, sortedRight);
-    //     } else if (sortedLeft != null) return sortedLeft;
-    //     else return sortedRight;
-    // }
-    //
-    // private static int[] merge(int[] arr1, int[] arr2) {
-    //     int[] ret = new int[arr1.length + arr2.length];
-    //     int left = 0, right = 0;
-    //     for (int i = 0; i < ret.length; ++i) {
-    //         if (left >= arr1.length) ret[i] = arr2[right++];
-    //         else if (right >= arr2.length) ret[i] = arr1[left++];
-    //         else if (arr1[left] < arr2[right]) ret[i] = arr1[left++];
-    //         else ret[i] = arr2[right++];
-    //     }
-    //     return ret;
-    // }
-
-
-
-
-    // MergeSort 简洁的写法
+// // merge sort, 手动建一个aux array的解法，这种方法也可以用来说明mergesort O(n) 的空间复杂度
     public static int[] mergeSort(int[] arr) {
         int[] ret = Arrays.copyOf(arr, arr.length);
-        mergeSort(ret, 0, ret.length - 1);
+        // 这里建一个长度为n的aux数组，用来作为每次merge的缓存数组，也是除了递归栈之外的所有额外空间，
+        // 递归栈高度为logn，所以整个的空间复杂度为 O(n + logn) == O(n);
+        int[] aux = new int[arr.length];
+        mergeSort(ret, aux, 0, arr.length - 1);
         return ret;
     }
-    private static void mergeSort(int[] arr, int p, int r) {
+
+    private static void mergeSort(int[] arr, int[] aux, int p, int r) {
         if (p >= r) return;
-        int q = (p + r) / 2;
-        mergeSort(arr, p, q);
-        mergeSort(arr, q + 1, r);
-        merge(arr, p, q, r);
+        int q = p + (r - p) / 2;
+        mergeSort(arr, aux, p, q);
+        mergeSort(arr, aux, q + 1, r);
+        merge(arr, aux, p, q, r);
     }
 
-    // 写这个函数之前先画图：
-    //  input arr: __|p|__________| q |______| r |_____
-    //  aux:         |0|__________|q-p|______|r-p|
-    private static void merge(int[] arr, int p, int q, int r) {
-        int[] aux = Arrays.copyOfRange(arr, p, r + 1);
-        int i = 0, j = q - p + 1;
-        for (int k = p; k < r + 1; ++k) {
-            if (i > q - p)            arr[k] = aux[j++];
-            else if (j > r - p)       arr[k] = aux[i++];
+    private static void merge(int[] arr, int[] aux, int p, int q, int r) {
+        // 先把arr中需要merge部分复制到aux中，然后merge后的结果存回arr原位
+        for (int i = p; i <= r; ++i) {
+            aux[i] = arr[i];
+        }
+        int i = p, j = q + 1;
+        for (int k = p; k <= r; ++k) {
+            if (i > q) arr[k] = aux[j++];
+            else if (j > r) arr[k] = aux[i++];
             else if (aux[i] < aux[j]) arr[k] = aux[i++];
-            else                      arr[k] = aux[j++];
+            else arr[k] = aux[j++];
         }
     }
+
+
+// // MergeSort 简洁的写法
+    // public static int[] mergeSort(int[] arr) {
+    //     int[] ret = Arrays.copyOf(arr, arr.length);
+    //     mergeSort(ret, 0, ret.length - 1);
+    //     return ret;
+    // }
+    // private static void mergeSort(int[] arr, int p, int r) {
+    //     if (p >= r) return;
+    //     int q = (p + r) / 2;
+    //     mergeSort(arr, p, q);
+    //     mergeSort(arr, q + 1, r);
+    //     merge(arr, p, q, r);
+    // }
+    //
+    // // 写这个函数之前先画图：
+    // //  input arr: __|p|__________| q |______| r |_____
+    // //  aux:         |0|__________|q-p|______|r-p|
+    // private static void merge(int[] arr, int p, int q, int r) {
+    //     int[] aux = Arrays.copyOfRange(arr, p, r + 1);
+    //     int i = 0, j = q - p + 1;
+    //     for (int k = p; k < r + 1; ++k) {
+    //         if (i > q - p)            arr[k] = aux[j++];
+    //         else if (j > r - p)       arr[k] = aux[i++];
+    //         else if (aux[i] < aux[j]) arr[k] = aux[i++];
+    //         else                      arr[k] = aux[j++];
+    //     }
+    // }
 
 
 
@@ -278,6 +276,7 @@ public class Sorting {
         }
         return i;
     }
+
 
     private static void swap(int[] arr, int i, int j) {
         int t = arr[i];
