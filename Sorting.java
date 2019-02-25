@@ -18,17 +18,17 @@ public class Sorting {
         // testInsertionSort(arr4);
         // testInsertionSort(arr5);
 
-        // testMergeSort(arr1);
-        // testMergeSort(arr2);
-        // testMergeSort(arr3);
-        // testMergeSort(arr4);
-        // testMergeSort(arr5);
+        testMergeSort(arr1);
+        testMergeSort(arr2);
+        testMergeSort(arr3);
+        testMergeSort(arr4);
+        testMergeSort(arr5);
 
-        testQuickSort(arr1);
-        testQuickSort(arr2);
-        testQuickSort(arr3);
-        testQuickSort(arr4);
-        testQuickSort(arr5);
+        // testQuickSort(arr1);
+        // testQuickSort(arr2);
+        // testQuickSort(arr3);
+        // testQuickSort(arr4);
+        // testQuickSort(arr5);
 
         // testBubbleSort(arr1);
         // testBubbleSort(arr2);
@@ -177,31 +177,51 @@ public class Sorting {
         // 这里建一个长度为n的aux数组，用来作为每次merge的缓存数组，也是除了递归栈之外的所有额外空间，
         // 递归栈高度为logn，所以整个的空间复杂度为 O(n + logn) == O(n);
         int[] aux = new int[arr.length];
-        mergeSort(ret, aux, 0, arr.length - 1);
+        // mergeSort(ret, aux, 0, arr.length - 1);
+        mergeSort(ret, 0, arr.length - 1);
         return ret;
     }
 
-    private static void mergeSort(int[] arr, int[] aux, int p, int r) {
-        if (p >= r) return;
-        int q = p + (r - p) / 2;
-        mergeSort(arr, aux, p, q);
-        mergeSort(arr, aux, q + 1, r);
-        merge(arr, aux, p, q, r);
+    private static void mergeSort(int[] arr, int left, int right) {
+        if (left >= right) return;
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
     }
 
-    private static void merge(int[] arr, int[] aux, int p, int q, int r) {
-        // 先把arr中需要merge部分复制到aux中，然后merge后的结果存回arr原位
-        for (int i = p; i <= r; ++i) {
-            aux[i] = arr[i];
-        }
-        int i = p, j = q + 1;
-        for (int k = p; k <= r; ++k) {
-            if (i > q) arr[k] = aux[j++];
-            else if (j > r) arr[k] = aux[i++];
-            else if (aux[i] < aux[j]) arr[k] = aux[i++];
-            else arr[k] = aux[j++];
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int[] aux = Arrays.copyOfRange(arr, left, right + 1);
+        int i = left, j = mid + 1;
+        for (int k = left; k <= right; ++k) {
+            if (i > mid) arr[k] = aux[j++ - left];
+            else if (j > right) arr[k] = aux[i++ - left];
+            else if (aux[i - left] < aux[j - left]) arr[k] = aux[i++ - left];
+            else arr[k] = aux[j++ - left];
         }
     }
+
+    // private static void mergeSort(int[] arr, int[] aux, int p, int r) {
+    //     if (p >= r) return;
+    //     int q = p + (r - p) / 2;
+    //     mergeSort(arr, aux, p, q);
+    //     mergeSort(arr, aux, q + 1, r);
+    //     merge(arr, aux, p, q, r);
+    // }
+
+    // private static void merge(int[] arr, int[] aux, int p, int q, int r) {
+    //     // 先把arr中需要merge部分复制到aux中，然后merge后的结果存回arr原位
+    //     for (int i = p; i <= r; ++i) {
+    //         aux[i] = arr[i];
+    //     }
+    //     int i = p, j = q + 1;
+    //     for (int k = p; k <= r; ++k) {
+    //         if (i > q) arr[k] = aux[j++];
+    //         else if (j > r) arr[k] = aux[i++];
+    //         else if (aux[i] < aux[j]) arr[k] = aux[i++];
+    //         else arr[k] = aux[j++];
+    //     }
+    // }
 
 
 // // MergeSort 简洁的写法
@@ -249,30 +269,20 @@ public class Sorting {
         quickSort(ret, 0, ret.length - 1);
         return ret;
     }
-    private static void quickSort(int[] arr, int p, int r) {
-        if (p >= r) return;
-        int q = partition(arr, p, r);
-        quickSort(arr, p, q - 1);
-        quickSort(arr, q + 1, r);
+
+    private static void quickSort(int[] arr, int left, int right) {
+        if (left >= right) return;
+        int mid = partition(arr, left, right);
+        quickSort(arr, left, mid - 1);
+        quickSort(arr, mid + 1, right);
     }
-    private static int partition(int[] arr, int p, int r) {
-        // // use the last element as pivot
-        // int pivot = arr[r];
-        // int i = p - 1, j = p;
-        // while (j < r) {
-        //     if (arr[j] <= pivot) swap(arr, ++i, j++);
-        //     else j++;
-        // }
-        // swap(arr, ++i, r);
-        // return i;
-
-
-           // 或者让j最右移到r，这样不需要另外换r到i+1
-        int pivot = arr[r];
-        int i = p - 1, j = p;
-        while (j <= r) {
-            if (arr[j] <= pivot) swap(arr, ++i, j++);
-            else j++;
+    // |----------------i-------------j->             pivot|
+    // left  <= pivot   |   > pivot   |  unexplored       right
+    private static int partition(int[] arr, int left, int right) {
+        int pivot = arr[right];
+        int i = left - 1;
+        for (int j = left; j <= right; ++j) {
+            if (arr[j] <= pivot) swap(arr, ++i, j);
         }
         return i;
     }
@@ -283,4 +293,5 @@ public class Sorting {
         arr[i] = arr[j];
         arr[j] = t;
     }
+
 }
